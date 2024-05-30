@@ -40,6 +40,8 @@
   <depend>rotors_control</depend>
   <depend>std_srvs</depend>
   <depend>tf</depend>
+  <depend>pcl_ros</depend>
+  <depend>image_transport</depend>
   <depend>yaml-cpp</depend>
 
 </package>

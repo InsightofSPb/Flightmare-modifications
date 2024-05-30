@@ -150,6 +150,28 @@ zmq
 zmqpp
 )
 
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  sensor_msgs
+  image_transport
+  cv_bridge
+  octomap_ros
+  octomap_msgs
+  pcl_ros
+  pcl_conversions
+)
+
+catkin_package()
+
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
+add_executable(octomap_node /home/s/fly/src/flightmare/flightros/src/pilot/octomap_node.cpp)
+target_link_libraries(octomap_node ${catkin_LIBRARIES})
+
+
 # Finish
 cs_install()
 cs_export()

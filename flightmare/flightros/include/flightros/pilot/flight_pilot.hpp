@@ -8,6 +8,7 @@
 #include <ros/ros.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/PointCloud2.h>
 
 // rpg quadrotor
 #include <autopilot/autopilot_helper.h>
@@ -40,11 +41,14 @@ class FlightPilot {
   bool setUnity(const bool render);
   bool connectUnity(void);
   bool loadParams(void);
+  void depthImageToPointCloud(const sensor_msgs::ImageConstPtr& depth_msg);
 
  private:
   // ros nodes
   ros::NodeHandle nh_;
   ros::NodeHandle pnh_;
+
+  ros::Publisher point_cloud_pub_;
 
   // publisher
   image_transport::Publisher rgb_pub_;

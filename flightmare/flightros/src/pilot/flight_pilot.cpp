@@ -2,6 +2,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.h>
 #include <ros/ros.h>
+#include <sensor_msgs/PointCloud2.h>
+#include <sensor_msgs/point_cloud2_iterator.h>
 
 // flightlib
 #include "flightlib/bridges/unity_bridge.hpp"
@@ -29,6 +31,7 @@ FlightPilot::FlightPilot(const ros::NodeHandle &nh, const ros::NodeHandle &pnh)
   } else {
     ROS_INFO("[%s] Loaded all parameters.", pnh_.getNamespace().c_str());
   }
+
 
   // quad initialization
   quad_ptr_ = std::make_shared<Quadrotor>();
@@ -64,6 +67,8 @@ FlightPilot::FlightPilot(const ros::NodeHandle &nh, const ros::NodeHandle &pnh)
   segmentation_pub_ = it.advertise("/segmentation", 1);
   depth_pub_ = it.advertise("/depth", 1);
   opticalflow_pub_ = it.advertise("/optical_flow", 1);
+
+  point_cloud_pub_ = nh_.advertise<sensor_msgs::PointCloud2>("/point_cloud", 1);
 
   // wait until the gazebo and unity are loaded
   ros::Duration(5.0).sleep();
@@ -127,6 +132,56 @@ void FlightPilot::poseCallback(const nav_msgs::Odometry::ConstPtr &msg) {
 void FlightPilot::mainLoopCallback(const ros::TimerEvent &event) {
   // empty
 }
+
+void FlightPilot::depthImageToPointCloud(const sensor_msgs::ImageConstPtr& depth_msg) {
+    // Assuming depth_msg is your depth image message
+    float fx = 525.0;  // Example focal length x
+    float fy = 525.0;  // Example focal length y
+    float cx = 319.5;  // Example principal point x (image width / 2)
+    float cy = 239.5;  // Example principal point y (image height / 2)
+    float factor = 5000.0;  // Example for scaling depth values to meters (specific to depth sensor)
+
+    sensor_msgs::PointCloud2 cloud;
+    cloud.header = depth_msg->header;
+    cloud.height = depth_msg->height;
+    cloud.width = depth_msg->width;
+    cloud.is_dense = false;
+    sensor_msgs::PointCloud2Modifier pcd_modifier(cloud);
+    pcd_modifier.setPointCloud2FieldsByString(1, "xyz");
+
+    sensor_msgs::PointCloud2Iterator<float> iter_x(cloud, "x");
+    sensor_msgs::PointCloud2Iterator<float> iter_y(cloud, "y");
+    sensor_msgs::PointCloud2Iterator<float> iter_z(cloud, "z");
+
+    const uint16_t* depth_row = reinterpret_cast<const uint16_t*>(&depth_msg->data[0]);
+    int row_step = depth_msg->step / sizeof(uint16_t);
+
+    for (int v = 0; v < depth_msg->height; ++v, depth_row += row_step) {
+        for (int u = 0; u < depth_msg->width; ++u) {
+            uint16_t depth = depth_row[u];
+
+            // Convert depth to meters
+            float z = depth / factor;
+            if (z == 0) continue;  // Skip no depth
+
+            // Convert (u, v, z) to (x, y, z)
+            float x = (u - cx) * z / fx;
+            float y = (v - cy) * z / fy;
+
+            *iter_x = x;
+            *iter_y = y;
+            *iter_z = z;
+
+            ++iter_x;
+            ++iter_y;
+            ++iter_z;
+        }
+    }
+
+    // Now you can publish this point cloud or use it further
+    point_cloud_pub_.publish(cloud);
+}
+
 
 bool FlightPilot::setUnity(const bool render) {
   unity_render_ = render;

@@ -1,7 +1,7 @@
 <launch>
   <arg name="scan_topic"  default="kinect/scan" />
-  <arg name="base_frame"  default="chassis"/>
-  <arg name="odom_frame"  default="odom"/>
+  <arg name="base_frame"  default="hummingbird/base_link"/>
+  <arg name="odom_frame"  default="/hummingbird/ground_truth/odometry"/>
 
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <param name="base_frame" value="$(arg base_frame)"/>

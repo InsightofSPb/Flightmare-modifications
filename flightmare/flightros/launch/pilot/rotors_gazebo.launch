@@ -68,7 +68,6 @@
     <!-- RPG Flightmare Unity Render. -->
     <node pkg="flightrender" type="RPG_Flightmare.x86_64" name="rpg_flightmare_render" unless="$(arg use_unity_editor)">
     </node>
-    <node name="octomap_node" pkg="flightros" type="octomap_node" output="screen"/>
 
     <!-- Autopilot -->
     <node pkg="autopilot" type="autopilot" name="autopilot" output="screen">
@@ -120,5 +119,11 @@
         --quad_name $(arg quad_name)" output="screen"/>
 
   </group>
+
+  <include file="$(find navros_pkg)/launch/pctl.launch" />
+
+  <node pkg="tf" type="static_transform_publisher" name="kinect_to_world" args="0 0 0 -1.57 0 -1.57 hummingbird/base_link kinect_camera_depth_optical_frame 50" />
+  <node pkg="tf" type="static_transform_publisher" name="map_to_world" args="0 0 0 0 0 0 world map 50" />
+  <!-- <node pkg="tf" type="static_transform_publisher" name="turn_to_world" args="0 0 0 -1.57 0 0 world hummingbird/base_link 50" /> -->
 
 </launch>

@@ -3,12 +3,28 @@
         <param name="resolution" value="0.05" />
 
         <!-- fixed map frame -->
-        <param name="frame_id" type="string" value="world" />
+        <param name="frame_id" type="string" value="map" />
 	
 	<param name="sensor_model/max_range" value="5.0" />
 
         <!-- data source to integrate (PointCloud2) -->
-        <remap from="cloud_in" to="//kinect_camera/depth/points" />
+        <remap from="cloud_in" to="/hummingbird/kinect_camera/depth/points" />
+
+    <param name="max_range" value="5.0" />
+    <param name="min_range" value="0.5" />
+    <param name="sensor_model/hit" value="0.7" />
+    <param name="sensor_model/miss" value="0.4" />
+    <param name="sensor_model/max_range" value="5.0" />
+    <param name="sensor_model/min_range" value="0.5" />
+    <param name="sensor_model/hit_probability" value="0.7" />
+    <param name="sensor_model/miss_probability" value="0.4" />
+
+    <param name="occupancy_min_z" value="0.0" />
+    <param name="occupancy_max_z" value="5.0" />
+    <param name="prob_hit" value="0.7" />
+    <param name="prob_miss" value="0.4" />
+    <param name="thresh_min" value="0.12" />
+    <param name="thresh_max" value="0.97" />
 
     </node>
 </launch>

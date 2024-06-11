@@ -1,15 +1,12 @@
 digraph G {
-"kinect_camera_link" -> "kinect_camera_depth_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"base_link" -> "kinect_camera_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"kinect_camera_depth_frame" -> "kinect_camera_depth_optical_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"base_stabilized" -> "base_link"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 100.204 Hz\nMost recent transform: 1468.307 ( 0.009 sec old)\nBuffer length: 4.910 sec\n"];
-"kinect_camera_link" -> "kinect_camera_rgb_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"kinect_camera_rgb_frame" -> "kinect_camera_rgb_optical_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"base_link" -> "sonar_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1468.316 sec old)\nBuffer length: 0.000 sec\n"];
-"world" -> "base_footprint"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 100.204 Hz\nMost recent transform: 1468.307 ( 0.009 sec old)\nBuffer length: 4.910 sec\n"];
-"base_footprint" -> "base_stabilized"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 100.204 Hz\nMost recent transform: 1468.307 ( 0.009 sec old)\nBuffer length: 4.910 sec\n"];
+"world" -> "hummingbird/base_link"[label="Broadcaster: /gazebo\nAverage rate: 946.717 Hz\nMost recent transform: 252.333 ( 0.001 sec old)\nBuffer length: 3.472 sec\n"];
+"map" -> "hummingbird/odometry_sensor1"[label="Broadcaster: /gazebo\nAverage rate: 940.620 Hz\nMost recent transform: 252.347 ( -0.013 sec old)\nBuffer length: 3.486 sec\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1468.316"[ shape=plaintext ] ;
+"Recorded at time: 252.334"[ shape=plaintext ] ;
  }->"world";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 252.334"[ shape=plaintext ] ;
+ }->"map";
 }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	
+	<!-- Spawn the car model -->
+	<include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor_main.launch" />
+	
+	<!-- Get laser scan readings -->
+	<include file="$(find navros_pkg)/launch/pctl.launch" />
+
+</launch>
